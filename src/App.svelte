@@ -124,7 +124,7 @@
   h1 {
     color: aliceblue;
     text-transform: uppercase;
-    font-size: 4em;
+    font-size: 2.5em;
     font-weight: 700;
   }
 
