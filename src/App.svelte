@@ -16,7 +16,7 @@
     loading = true;
     response = -1;
     fetch(
-      `https://si-attendance-api-justinstitt.vercel.app/signin?cwid=${cwid}&course=${course}`,
+      `https://si-attendance-api.vercel.app/signin?cwid=${cwid}&course=${course}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
