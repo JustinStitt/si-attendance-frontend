@@ -18,7 +18,7 @@
     fetch(
       `https://si-attendance-api.vercel.app/signin?cwid=${cwid}&course=${course}`,
       {
-        method: "POST",
+        method: "GET",
         headers: { "Content-Type": "application/json" },
       }
     ).then((res) => {
