@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { Circle3 } from "svelte-loading-spinners";
 
+  // TODO:justinstitt fetch these from backend (requires getting CWID first, then displaying courses)
   const courses = ["CPSC-120", "CPSC-121", "CPSC-131", "CPSC-240", "CPSC-375"];
 
   let cwid_inp = "";
@@ -53,7 +54,12 @@
   <h1>SI Attendance</h1>
   {#if !prefetched}
     <div class="form" style:visibility={prefetched ? "hidden" : "visible"}>
-      <input placeholder="CWID" type="text" bind:value={cwid_inp} />
+      <input
+        placeholder="CWID"
+        type="text"
+        bind:value={cwid_inp}
+        pattern="\d*"
+      />
       <select bind:value={course_inp}>
         {#each courses as some}
           <option value={some}>{some}</option>
