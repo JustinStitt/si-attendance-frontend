@@ -9,3 +9,6 @@ Serves as a public-facing web app for the [si-attendance-api](https://github.com
 
 #### QR Code
 ![](./media/qr-code-small.png)
+
+
+shortened link: https://bit.ly/3pMOquD
