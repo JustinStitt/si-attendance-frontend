@@ -168,7 +168,7 @@
   {/if}
 </main>
 
-<BurgerMenu burgerColor="white" backgroundColor="#ff7900">
+<BurgerMenu class="menu" burgerColor="white" backgroundColor="#ff7900">
   <h2 class="burger-content" on:click={clearCache}>Clear Cache</h2>
   {#if show_cache_help_text}
     <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
@@ -182,6 +182,7 @@
     /* width + 60px padding left and right === 350px width */
     width: 280px;
     padding: 20px 35px;
+    margin-top: 20px;
     background-color: #303030;
     border-radius: 20px;
     display: flex;
@@ -325,5 +326,9 @@
     width: 40%;
     top: 55px;
     left: 66%;
+  }
+
+  .menu {
+    position: absolute;
   }
 </style>
