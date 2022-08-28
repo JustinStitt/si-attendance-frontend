@@ -19,6 +19,7 @@
     "svelte-loading-spinners": "^0.1.7"
   },
   "dependencies": {
-    "sirv-cli": "^2.0.0"
+    "sirv-cli": "^2.0.0",
+    "svelte-burger-menu": "^1.0.5"
   }
 }
