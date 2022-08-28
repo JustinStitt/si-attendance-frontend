@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { Circle3 } from "svelte-loading-spinners";
-  import BurgerMenu from "svelte-burger-menu";
 
+  import BurgerMenu from "./components/svelte-burger-menu/src/BurgerMenu.svelte";
   // TODO:justinstitt fetch these from backend (requires getting CWID first, then displaying courses)
   const courses = ["CPSC-120", "CPSC-121", "CPSC-131", "CPSC-240", "CPSC-375"];
 
