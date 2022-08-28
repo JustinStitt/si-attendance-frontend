@@ -67,6 +67,7 @@
 
   let cwid_message = "";
 
+  // as per http://www.fullerton.edu/cwid/
   const checkCWIDValid = (_cwid) => {
     if (!_cwid.length) {
       cwid_message = "";
@@ -81,6 +82,10 @@
         cwid_message = "CWID should only contain digits!";
         return;
       }
+    }
+    if (_cwid[0] != "8") {
+      cwid_message = "CWID must start with 8";
+      return;
     }
     cwid_message = "";
   };
