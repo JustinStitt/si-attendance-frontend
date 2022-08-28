@@ -51,7 +51,10 @@
 </script>
 
 <main>
-  <h1>SI Attendance</h1>
+  <div class="title">
+    <h2>Supplemental Instruction</h2>
+    <h1>Attendance</h1>
+  </div>
   {#if !prefetched}
     <div class="form" style:visibility={prefetched ? "hidden" : "visible"}>
       <input
@@ -60,11 +63,15 @@
         bind:value={cwid_inp}
         pattern="\d*"
       />
-      <select bind:value={course_inp}>
-        {#each courses as some}
-          <option value={some}>{some}</option>
-        {/each}
-      </select>
+      <div class="select-box">
+        <select bind:value={course_inp}>
+          <!-- placeholder text -->
+          <option value="" selected hidden required> SI COURSE </option>
+          {#each courses as some}
+            <option value={some}>{some}</option>
+          {/each}
+        </select>
+      </div>
       <button on:click={click}>Submit</button>
     </div>
   {/if}
@@ -92,6 +99,29 @@
 </main>
 
 <style>
+  /* title styles */
+  .title {
+    /* width + 60px padding left and right === 350px width */
+    width: 280px;
+    padding: 20px 35px;
+    background-color: #303030;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .title h2,
+  .title h1 {
+    color: #f8f8f8;
+    padding: 0;
+    margin: 0;
+  }
+  .title h2 {
+    font-weight: 500;
+  }
+  .title h1 {
+    font-weight: 700;
+  }
+  /* status/processing styles */
   .good {
     font-size: 5em;
   }
@@ -99,11 +129,9 @@
     align-self: center;
     margin-top: 20px;
   }
-
   h3 {
-    color: aliceblue;
+    color: #f8f8f8;
   }
-
   main {
     display: flex;
     align-items: center;
@@ -113,38 +141,40 @@
     max-width: 240px;
     margin: 0 auto;
   }
-
   .form {
     display: flex;
     flex-direction: column;
-    margin-top: 80px;
-    width: 100%;
+    margin-top: 85px;
+    gap: 55px;
   }
-
   .response {
-    color: aliceblue;
+    color: #f8f8f8;
     font-size: 1.5em;
     font-weight: 500;
   }
-
   h1 {
-    color: aliceblue;
+    color: #f8f8f8;
     text-transform: uppercase;
     font-size: 2.5em;
     font-weight: 700;
   }
 
-  @media (min-width: 640px) {
+  /* @media (min-width: 640px) {
     main {
       max-width: none;
     }
     .form {
-      width: 40%;
+      width: 100%;
     }
-  }
+  } */
 
   button {
-    background-color: rgb(122, 166, 128);
-    color: aliceblue;
+    border: #ff7900 3px solid;
+    background-color: #ff7900;
+    color: #f8f8f8;
+  }
+  button:hover {
+    background-color: #303030;
+    color: #ff7900;
   }
 </style>
