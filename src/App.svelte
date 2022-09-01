@@ -4,7 +4,7 @@
 
   import BurgerMenu from "./components/svelte-burger-menu/src/BurgerMenu.svelte";
   // TODO:justinstitt fetch these from backend (requires getting CWID first, then displaying courses)
-  const courses = ["CPSC-120", "CPSC-121", "CPSC-131", "CPSC-240", "CPSC-375"];
+  const courses = ["CPSC-120", "CPSC-121", "CPSC-131", "CPSC-240"];
 
   let cwid_inp = "";
   let course_inp = "";
@@ -69,6 +69,7 @@
 
   // as per http://www.fullerton.edu/cwid/
   const checkCWIDValid = (_cwid) => {
+    can_submit = false;
     if (!_cwid.length) {
       cwid_message = "";
       return;
@@ -88,6 +89,7 @@
       return;
     }
     cwid_message = "";
+    can_submit = true;
   };
 
   let cwid_focused = false;
