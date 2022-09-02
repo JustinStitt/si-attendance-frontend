@@ -176,11 +176,15 @@
 </main>
 
 <BurgerMenu class="menu" burgerColor="white" backgroundColor="#ff7900">
-  <h2 class="burger-content" on:click={clearCache}>Clear Cache</h2>
-  {#if show_cache_help_text}
-    <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
-  {/if}
-  <h2 class="burger-content">Home</h2>
+  <span class="bmenu-flex">
+    <h2 class="burger-content" on:click={clearCache}>Clear Cache</h2>
+    {#if show_cache_help_text}
+      <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
+    {/if}
+    <h5 class="burger-content" meta="utf-8">
+      Made with love by Aaron Lieberman and Justin Stitt.
+    </h5>
+  </span>
 </BurgerMenu>
 
 <style>
@@ -337,5 +341,13 @@
 
   .menu {
     position: absolute;
+  }
+
+  .bmenu-flex {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
   }
 </style>
