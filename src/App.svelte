@@ -48,10 +48,13 @@
     // check browser storage
     let stored_cwid = localStorage.getItem("cwid");
     let stored_course = localStorage.getItem("course");
-    if (!stored_cwid && !stored_course) return;
+    if (!stored_cwid && !stored_course) {
+      return;
+    }
     // otherwise both populated
     loading = true;
     prefetched = true;
+    can_submit = true;
     signin(stored_cwid, stored_course);
   });
 
