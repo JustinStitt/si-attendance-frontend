@@ -23,23 +23,30 @@
     response = -1;
     fetch(
       `https://si-attendance-api.vercel.app/signin?cwid=${cwid}&course=${course}`,
+      // `http://127.0.0.1:5000/signin?cwid=${cwid}&course=${course}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       }
-    ).then((res) => {
-      console.log("response:", res);
-      if (res.ok) {
-        response = 1;
-        // save to localStorage
-        localStorage.setItem("cwid", cwid);
-        localStorage.setItem("course", course);
-      } else response = 0;
-      loading = false;
-      can_submit = true;
-    });
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("response:", res);
+        if (res.errmessage.length == 0) {
+          response = 1;
+          // save to localStorage
+          localStorage.setItem("cwid", cwid);
+          localStorage.setItem("course", course);
+        } else {
+          response = 0;
+          response_message = res["errmessage"];
+          console.log(response_message);
+        }
+        loading = false;
+        can_submit = true;
+      });
   };
-
+  let response_message = "";
   let response = -1;
   let prefetched = false;
   let loading = false;
@@ -173,7 +180,7 @@
     {#if response == 1}
       <div class="response">Successfully signed in!</div>
     {:else}
-      <div class="response">Something went wrong!</div>
+      <div class="response">{response_message}!</div>
     {/if}
   {/if}
 </main>
