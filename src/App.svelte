@@ -25,6 +25,7 @@
   const signin = (cwid, course) => {
     if (!cwid.length || !course.length) return;
     if (!can_submit) return;
+    console.log("SIGNED IN");
     can_submit = false;
     loading = true;
     response = -1;
@@ -44,6 +45,7 @@
           // save to localStorage
           localStorage.setItem("cwid", cwid);
           localStorage.setItem("course", course);
+          localStorage.setItem("last-sign-in", Date.now());
         } else {
           response = 0;
           response_message = res["errmessage"];
@@ -57,15 +59,24 @@
   let response = -1;
   let prefetched = false;
   let loading = false;
+  let signed_in_today = false;
 
   onMount(async () => {
     // check browser storage
     let stored_cwid = localStorage.getItem("cwid");
     let stored_course = localStorage.getItem("course");
+    let last_sign_in = localStorage.getItem("last-sign-in") || Date.now();
+    let hour_delta = Math.abs(last_sign_in - Date.now()) / 36e5; // 60*60*1000
     if (!stored_cwid && !stored_course) {
       return;
     }
+
     // otherwise both populated
+    console.log(hour_delta);
+    if (hour_delta < 18) {
+      signed_in_today = true;
+      return;
+    }
     loading = true;
     prefetched = true;
     can_submit = true;
@@ -80,6 +91,12 @@
     setTimeout(() => {
       show_cache_help_text = false;
     }, 2500);
+  };
+
+  const signInDifferentCourse = () => {
+    signed_in_today = false;
+    localStorage.clear(); // theoretically the student can proceed to sign back
+    // into the course that we just warned them about, but I CBA solving this
   };
 
   let cwid_message = "";
@@ -128,7 +145,7 @@
     <h2>Supplemental Instruction</h2>
     <h1>Attendance</h1>
   </div>
-  {#if !prefetched}
+  {#if !prefetched && !signed_in_today}
     <div class="form" style:visibility={prefetched ? "hidden" : "visible"}>
       <span>
         <input
@@ -168,6 +185,16 @@
         disabled={!course_valid || !cwid_valid || !can_submit}>Submit</button
       >
     </div>
+  {/if}
+  {#if signed_in_today}
+    <h3>
+      You've Already Signed in Today For <big
+        >{localStorage.getItem("course")}</big
+      >
+    </h3>
+    <button on:click={signInDifferentCourse} class="different"
+      >Sign in For a Different Course</button
+    >
   {/if}
   {#if loading}
     <span class="loading">
@@ -366,5 +393,13 @@
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+  }
+
+  big {
+    color: orange;
+  }
+
+  .different {
+    font-size: 1.3rem;
   }
 </style>
