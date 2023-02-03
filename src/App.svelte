@@ -99,6 +99,34 @@
     // into the course that we just warned them about, but I CBA solving this
   };
 
+  let nonCWIDStudent = false; // assume student has a CWID
+  let non_cwid_status = "";
+  let non_cwid_name = "";
+
+  const noCWID = () => {
+    nonCWIDStudent = true;
+  };
+
+  const nonCWIDSignIn = () => {
+    console.log(non_cwid_name, non_cwid_status);
+    loading = true;
+    fetch(
+      `http://127.0.0.1:5000/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
+      // `https://si-attendance-api.vercel.app/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("response:", res);
+        response = 1;
+        prefetched = true;
+        loading = false;
+      });
+  };
+
   let cwid_message = "";
 
   // as per http://www.fullerton.edu/cwid/
@@ -147,30 +175,48 @@
   </div>
   {#if !prefetched && !signed_in_today}
     <div class="form" style:visibility={prefetched ? "hidden" : "visible"}>
-      <span>
+      {#if !nonCWIDStudent}
+        <span>
+          <input
+            placeholder="CWID"
+            type="text"
+            bind:value={cwid_inp}
+            pattern="\d*"
+            style="border: 1px solid aliceblue"
+            on:focus={toggleCWIDFocus}
+            on:blur={toggleCWIDFocus}
+          />
+          {#if cwid_message.length == 0 && cwid_inp.length}
+            <div class="cwid_warn_icon" class:noborder={1}>✅</div>
+          {/if}
+          {#if cwid_inp.length > 9 || (cwid_message.length != 0 && !cwid_focused)}
+            <div
+              bind:this={cwid_warning_icon}
+              class="cwid_warn_icon"
+              class:noborder={cwid_message.length == 0}
+            >
+              {cwid_message.length ? "❗" : "✅"}
+            </div>
+            <div class="cwid_warn">{cwid_message}</div>
+          {/if}
+        </span>
+      {/if}
+      {#if nonCWIDStudent}
         <input
-          placeholder="CWID"
           type="text"
-          bind:value={cwid_inp}
-          pattern="\d*"
+          placeholder="Name"
           style="border: 1px solid aliceblue"
-          on:focus={toggleCWIDFocus}
-          on:blur={toggleCWIDFocus}
+          bind:value={non_cwid_name}
         />
-        {#if cwid_message.length == 0 && cwid_inp.length}
-          <div class="cwid_warn_icon" class:noborder={1}>✅</div>
-        {/if}
-        {#if cwid_inp.length > 9 || (cwid_message.length != 0 && !cwid_focused)}
-          <div
-            bind:this={cwid_warning_icon}
-            class="cwid_warn_icon"
-            class:noborder={cwid_message.length == 0}
-          >
-            {cwid_message.length ? "❗" : "✅"}
-          </div>
-          <div class="cwid_warn">{cwid_message}</div>
-        {/if}
-      </span>
+        <div class="select-box" style="border: 1px solid aliceblue">
+          <select bind:value={non_cwid_status}>
+            <option value="" selected hidden required>Status</option>
+            <option value="open-enrollment">Open Enrollment Student</option>
+            <option value="transfer">Transfer Student</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      {/if}
       <div class="select-box" style="border: 1px solid aliceblue">
         <select bind:value={course_inp}>
           <!-- placeholder text -->
@@ -180,10 +226,19 @@
           {/each}
         </select>
       </div>
-      <button
-        on:click={click}
-        disabled={!course_valid || !cwid_valid || !can_submit}>Submit</button
-      >
+      {#if !nonCWIDStudent}
+        <button
+          on:click={click}
+          disabled={!course_valid || !cwid_valid || !can_submit}>Submit</button
+        >
+      {:else}
+        <button
+          on:click={nonCWIDSignIn}
+          disabled={!course_valid ||
+            non_cwid_name == "" ||
+            non_cwid_status == ""}>Submit2</button
+        >
+      {/if}
     </div>
   {/if}
   {#if signed_in_today}
@@ -212,7 +267,7 @@
   {/if}
   {#if response != -1}
     {#if response == 1}
-      <div class="response">Successfully signed in!</div>
+      <div class="response">Successfully signed in to {course_inp}!</div>
     {:else}
       <div class="response">{response_message}!</div>
     {/if}
@@ -221,14 +276,16 @@
 
 <BurgerMenu class="menu" burgerColor="white" backgroundColor="#ff7900">
   <span class="bmenu-flex">
-    <h2 class="burger-content" on:click={clearCache}>Clear Cache</h2>
+    <button class="burger-button" on:click={noCWID}>I Don't Have a CWID!</button
+    >
+    <button class="burger-button" on:click={clearCache}>Clear Cache</button>
     {#if show_cache_help_text}
       <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
     {/if}
-    <h5 class="burger-content" meta="utf-8">
-      Made with love by Aaron Lieberman and Justin Stitt.
-    </h5>
   </span>
+  <h5 class="burger-content" meta="utf-8">
+    Made with love by Justin Stitt and Aaron Lieberman.
+  </h5>
 </BurgerMenu>
 
 <style>
@@ -360,21 +417,6 @@
     background: none;
   }
 
-  .burger-content {
-    color: aliceblue;
-    transition: transform 0.75s ease;
-  }
-
-  .burger-content:hover {
-    transform: scale(1.2) translateX(20px);
-    /* transform: translateX(10px); */
-  }
-
-  .burger-content:active {
-    transition: transform 0.1s linear;
-    transform: scale(1.5) translateX(30px);
-  }
-
   .cache-help-text {
     color: aliceblue;
     position: absolute;
@@ -383,16 +425,10 @@
     left: 66%;
   }
 
-  .menu {
-    position: absolute;
-  }
-
   .bmenu-flex {
     height: 85vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
   }
 
   big {
@@ -401,5 +437,23 @@
 
   .different {
     font-size: 1.3rem;
+  }
+
+  .burger-button {
+    background-color: #303030;
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 2vh;
+    transition: none !important;
+  }
+
+  .burger-button:hover {
+    background-color: #303040 !important;
+    transform: scale(1.1);
+  }
+
+  .burger-button:active {
+    background-color: darkgray !important;
+    transform: scale(1.15);
   }
 </style>
