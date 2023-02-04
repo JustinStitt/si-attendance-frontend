@@ -111,8 +111,8 @@
     console.log(non_cwid_name, non_cwid_status);
     loading = true;
     fetch(
-      `http://127.0.0.1:5000/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
-      // `https://si-attendance-api.vercel.app/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
+      // `http://127.0.0.1:5000/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
+      `https://si-attendance-api.vercel.app/noncwidsignin?nonCWIDStatus=${non_cwid_status}&course=${course_inp}&name=${non_cwid_name}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -236,7 +236,7 @@
           on:click={nonCWIDSignIn}
           disabled={!course_valid ||
             non_cwid_name == "" ||
-            non_cwid_status == ""}>Submit2</button
+            non_cwid_status == ""}>Submit</button
         >
       {/if}
     </div>
