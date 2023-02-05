@@ -104,7 +104,8 @@
   let non_cwid_name = "";
 
   const noCWID = () => {
-    nonCWIDStudent = true;
+    nonCWIDStudent = !nonCWIDStudent;
+    menu_open = false;
   };
 
   const nonCWIDSignIn = () => {
@@ -153,6 +154,8 @@
     cwid_message = "";
     can_submit = true;
   };
+
+  let menu_open;
 
   let cwid_focused = false;
   const toggleCWIDFocus = () => {
@@ -274,18 +277,32 @@
   {/if}
 </main>
 
-<BurgerMenu class="menu" burgerColor="white" backgroundColor="#ff7900">
+<BurgerMenu
+  class="menu"
+  burgerColor="white"
+  backgroundColor="#ff7900"
+  bind:open={menu_open}
+>
   <span class="bmenu-flex">
-    <button class="burger-button" on:click={noCWID}>I Don't Have a CWID!</button
-    >
+    {#if nonCWIDStudent}
+      <button class="burger-button" on:click={noCWID}>Sign In With CWID</button>
+    {:else}
+      <button class="burger-button" on:click={noCWID}
+        >I Don't Have a CWID!</button
+      >
+    {/if}
     <button class="burger-button" on:click={clearCache}>Clear Cache</button>
     {#if show_cache_help_text}
       <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
     {/if}
+    <h5 class="burger-content" meta="utf-8">
+      💙 Made with love by Justin Stitt and Aaron Lieberman. 💜
+      <a
+        href="https://github.com/JustinStitt/si-attendance-frontend"
+        style="color: #705380;">Source Code</a
+      >
+    </h5>
   </span>
-  <h5 class="burger-content" meta="utf-8">
-    Made with love by Justin Stitt and Aaron Lieberman.
-  </h5>
 </BurgerMenu>
 
 <style>
@@ -426,7 +443,7 @@
   }
 
   .bmenu-flex {
-    height: 85vh;
+    height: 93vh;
     display: flex;
     flex-direction: column;
   }
@@ -437,6 +454,12 @@
 
   .different {
     font-size: 1.3rem;
+  }
+
+  .burger-content {
+    color: aliceblue;
+    position: bottom;
+    margin-top: auto;
   }
 
   .burger-button {
