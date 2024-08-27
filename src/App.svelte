@@ -290,7 +290,7 @@
       <h4 class="cache-help-text" bind:this={cache_help_text}>cleared✅</h4>
     {/if}
     <h5 class="burger-content" meta="utf-8">
-      💙 Made with love by Justin Stitt and Aaron Lieberman. 💜
+      💙 Made with love by Justin Stitt, Aaron Lieberman and Alan Cortez 💜
       <a
         href="https://github.com/JustinStitt/si-attendance-frontend"
         style="color: #705380;">Source Code</a
