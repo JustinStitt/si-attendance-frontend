@@ -39,6 +39,7 @@
           localStorage.setItem("cwid", cwid);
           localStorage.setItem("course", course);
           localStorage.setItem("last-sign-in", Date.now());
+          signed_in_today = true;
         } else {
           response = 0;
           response_message = res["errmessage"];
@@ -237,7 +238,7 @@
       {/if}
     </div>
   {/if}
-  {#if signed_in_today}
+  {#if signed_in_today && response != 1}
     <h3>
       You've Already Signed in Today For <big
         >{localStorage.getItem("course")}</big
